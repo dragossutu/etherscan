@@ -1,0 +1,9 @@
+[package]
+name = "esctl"
+version = "0.1.0"
+edition = "2021"
+description = "A CLI app to interact with etherscan.io API"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
