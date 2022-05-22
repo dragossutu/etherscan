@@ -1,2 +1,5 @@
 .idea
+/contracts
 /target
+
+/etherscan-api-key.txt
