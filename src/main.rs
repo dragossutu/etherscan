@@ -3,8 +3,11 @@ use clap::Parser;
 use serde::{Deserialize, Serialize};
 use log::{info};
 use std::collections::HashMap;
+use std::fs;
+use std::path::Path;
 
 const ETHERSCAN_API_KEY_FILE_PATH: &str = "./etherscan-api-key.txt";
+const CONTRACTS_DEST_DIR: &str = "./contracts";
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -79,8 +82,19 @@ fn main() -> Result<()> {
         let source_codes: GetContractSourceCode = serde_json::from_str(r)?;
 
         for (contract_path, contract_code) in source_codes.sources {
-            println!("{}", contract_path);
-            println!("{}", contract_code.content);
+            let mut p = Path::new(&contract_path);
+
+            // some contracts path contain a leading "/", make sure it's removed
+            if p.starts_with("/") {
+                p = p.strip_prefix("/")?;
+            }
+
+            // make sure dirs in path exist
+            let contract_dir = Path::new(CONTRACTS_DEST_DIR).join(p.parent().unwrap());
+            fs::create_dir_all(&contract_dir)?;
+
+            // create solidity file
+            fs::write(contract_dir.join(p.file_name().unwrap()), contract_code.content);
         }
     }
 
