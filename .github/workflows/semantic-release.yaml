@@ -1,0 +1,21 @@
+name: test-and-package
+on: [push]
+#  push:
+#    branches:
+#      - master
+jobs:
+  semantic_release:
+    name: semantic release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install node.js 16
+        uses: actions/setup-node@v2
+        with:
+          cache: npm
+          node-version: 16
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
