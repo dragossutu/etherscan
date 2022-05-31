@@ -1,0 +1,23 @@
+name: test-and-package
+on:
+  push:
+    branches:
+      - main
+jobs:
+  semantic_release:
+    name: semantic release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install semantic-release and plugins
+        run: |
+          npm install --save-dev \
+            semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/exec \
+            @semantic-release/git
+      - name: Release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx semantic-release
