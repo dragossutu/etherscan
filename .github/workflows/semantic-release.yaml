@@ -10,13 +10,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Install semantic-release and plugins
+      - name: Install semantic-release, plugins and toml-cli
         run: |
           npm install --save-dev \
             semantic-release \
             @semantic-release/changelog \
             @semantic-release/exec \
-            @semantic-release/git
+            @semantic-release/git \
+              && pip3 install toml-cli
       - name: Release
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
