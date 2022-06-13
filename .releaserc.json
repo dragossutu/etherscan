@@ -9,15 +9,15 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "echo ${nextRelease.version} > VERSION"
+        "prepareCmd": "toml set --toml-path Cargo.toml package.version ${nextRelease.version}"
       }
     ],
     [
       "@semantic-release/git",
       {
         "assets": [
-          "CHANGELOG.md",
-          "VERSION"
+          "Cargo.toml",
+          "CHANGELOG.md"
         ]
       }
     ],
