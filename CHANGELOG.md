@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/dragossutu/esctl/compare/1.0.0...1.1.0) (2022-06-13)
+
+
+### Features
+
+* **pipeline:** Install toml-cli in github actions pipeline ([e6d60ea](https://github.com/dragossutu/esctl/commit/e6d60ea62a136324545b75b056298b8e70446bd4))
+* **pipeline:** Update version in Cargo.toml instead of VERSION file in github actions pipeline ([4cfe3ac](https://github.com/dragossutu/esctl/commit/4cfe3ac029e01911719ebbac596260f0250dd202))
+
 # 1.0.0 (2022-05-31)
 
 
