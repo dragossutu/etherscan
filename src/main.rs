@@ -32,7 +32,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let api_key = std::fs::read_to_string(api_key_file_path)?;
 
-    let contracts_client = contracts::client::Client::new(api_key);
+    let http_client = reqwest::blocking::Client::new();
+    let contracts_client = contracts::client::Client::new(http_client, api_key);
     let contracts_service = contracts::service::Service::new(&contracts_client);
 
     let contracts = contracts_service.get_contracts(&args.contract_address)?;
