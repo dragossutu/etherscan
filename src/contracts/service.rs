@@ -1,5 +1,5 @@
 use crate::Request;
-use anyhow::Result;
+use anyhow::{Context, Result};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -28,7 +28,10 @@ where
     C: Request,
 {
     fn get_contracts(&self, contract_address: &str) -> Result<Vec<Contract>> {
-        let contracts_info = self.client.get_source_code(contract_address)?;
+        let contracts_info = self
+            .client
+            .get_source_code(contract_address)
+            .context("client failed to get source code")?;
 
         let mut contracts = Vec::new();
 

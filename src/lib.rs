@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, Context, Result};
 use std::fs;
 use std::path::Path;
 
@@ -19,16 +19,20 @@ pub fn download_source_code_files(
 
     let contracts_service = contracts::service::Service::new(&contracts_client);
 
-    let contracts = contracts_service.get_contracts(&contract_address)?;
+    let contracts = contracts_service
+        .get_contracts(&contract_address)
+        .context("contracts_service failed to get contracts")?;
 
     for c in contracts.iter() {
         let mut p = Path::new(&c.path);
 
-        // some contracts path contain a leading "/", make sure it's removed
+        // some contracts path contain a leading "/",
+        // make sure it's removed before creating the file
         if p.starts_with("/") {
-            p = p.strip_prefix("/")?;
+            p = p.strip_prefix("/").unwrap();
         }
 
+        // make sure the file has '.sol' extension
         if p.file_name().is_none() {
             return Err(anyhow!("failed to get file name from path: {:?}", p));
         }
@@ -41,7 +45,7 @@ pub fn download_source_code_files(
             file_name = tmp.as_str();
         }
 
-        // create dirs in Solidity file's path
+        // create all the dirs in Solidity file's path
         if p.parent().is_none() {
             return Err(anyhow!(
                 "failed to get path without file name from path: {:?}",
@@ -52,11 +56,12 @@ pub fn download_source_code_files(
         let contract_dir = Path::new(CONTRACTS_DEST_DIR)
             .join(&contract_address)
             .join(p.parent().unwrap());
-        fs::create_dir_all(&contract_dir)?;
+        fs::create_dir_all(&contract_dir).context("failed to create contracts dir")?;
 
         // create Solidity file
         let contract_file_path = contract_dir.join(file_name);
-        fs::write(contract_file_path, &c.code)?;
+        fs::write(contract_file_path, &c.code)
+            .context("failed to crate and write to solidity file")?;
     }
 
     Ok(())
