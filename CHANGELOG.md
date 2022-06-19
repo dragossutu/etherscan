@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/dragossutu/scancli/compare/1.2.0...1.3.0) (2022-06-19)
+
+
+### Features
+
+* **rename-crate:** Rename crate, repo and lib function ([8f3f505](https://github.com/dragossutu/scancli/commit/8f3f505c992ce42bcd6e823a63bfd8b6e80a98a3))
+
 # [1.2.0](https://github.com/dragossutu/esctl/compare/1.1.0...1.2.0) (2022-06-19)
 
 
