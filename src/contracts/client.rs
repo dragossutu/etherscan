@@ -140,7 +140,7 @@ mod tests {
     }
 
     #[test]
-    fn returns_error_when_api_retuns_5xx_error() {
+    fn returns_error_when_api_responds_with_error_http_code() {
         // given
         let api_key = "669b35403c19957a2a295f130e4bc6936c";
 
