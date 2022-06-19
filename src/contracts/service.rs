@@ -1,10 +1,10 @@
 use crate::Request;
+use anyhow::Result;
 use serde::Deserialize;
 use std::collections::HashMap;
-use std::error::Error;
 
 pub(crate) trait Contracts {
-    fn get_contracts(&self, contract_address: &str) -> Result<Vec<Contract>, Box<dyn Error>>;
+    fn get_contracts(&self, contract_address: &str) -> Result<Vec<Contract>>;
 }
 
 pub(crate) struct Service<'a, C>
@@ -27,23 +27,47 @@ impl<'a, C> Contracts for Service<'a, C>
 where
     C: Request,
 {
-    fn get_contracts(&self, contract_address: &str) -> Result<Vec<Contract>, Box<dyn Error>> {
+    fn get_contracts(&self, contract_address: &str) -> Result<Vec<Contract>> {
         let contracts_info = self.client.get_source_code(contract_address)?;
 
         let mut contracts = Vec::new();
 
         for c in contracts_info.iter() {
-            let mut source_code_raw = c.source_code.strip_prefix("{").unwrap_or(&c.source_code);
+            let mut source_code_raw = c.source_code.clone();
 
-            source_code_raw = source_code_raw.strip_suffix("}").unwrap_or(source_code_raw);
+            if source_code_raw.starts_with("{{") {
+                source_code_raw = source_code_raw.strip_prefix("{").unwrap().to_string();
+            }
 
-            let s: SourceCode = serde_json::from_str(source_code_raw)?;
+            if source_code_raw.ends_with("}}") {
+                source_code_raw = source_code_raw.strip_suffix("}").unwrap().to_string();
+            }
 
-            for (contract_path, contract_code) in s.sources {
-                contracts.push(Contract {
-                    code: contract_code.content,
-                    path: contract_path,
-                });
+            // `source_code_raw` is a string containing either:
+            // - a single contract file's code
+            // - or a JSON with multiple files' code
+            match serde_json::from_str(&source_code_raw) {
+                Err(e) => {
+                    if e.is_syntax() && e.line() == 1 && e.column() == 1 {
+                        // TODO: log here
+                        contracts.push(Contract {
+                            code: source_code_raw,
+                            path: c.contract_name.to_string(),
+                        });
+                    } else {
+                        return Err(anyhow::Error::new(e)
+                            .context("failed to deserialize JSON contract source code"));
+                    }
+                }
+                Ok(r) => {
+                    let s: SourceCode = r;
+                    for (contract_path, contract_code) in s.sources {
+                        contracts.push(Contract {
+                            code: contract_code.content,
+                            path: contract_path,
+                        });
+                    }
+                }
             }
         }
 
@@ -84,19 +108,32 @@ mod tests {
             }
         }}"#;
 
-        mock_client.expect_get_source_code()
+        mock_client
+            .expect_get_source_code()
             .with(eq(contract_address))
             .times(1)
-            .returning(|_| Ok(vec![ContractInfo{ source_code: source_code.to_string() }]));
+            .returning(|_| {
+                Ok(vec![ContractInfo {
+                    contract_name: "MyContract".to_string(),
+                    source_code: source_code.to_string(),
+                }])
+            });
 
         let service = Service::new(&mock_client);
 
         let r = service.get_contracts(contract_address);
         assert!(r.is_ok(), "Result returned by get_contracts() is not Ok");
         let contracts = r.unwrap();
-        assert_eq!(contracts.len(), 1, "returned Vec<Contract> didn't have the expected length");
+        assert_eq!(
+            contracts.len(),
+            1,
+            "returned Vec<Contract> didn't have the expected length"
+        );
         let contract = contracts.get(0).unwrap();
         assert_eq!(contract.path, "main.sol", "contract path didn't match");
-        assert_eq!(contract.code, "pragma solidity 0.8.14;", "contract code didn't match");
+        assert_eq!(
+            contract.code, "pragma solidity 0.8.14;",
+            "contract code didn't match"
+        );
     }
 }

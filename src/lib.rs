@@ -1,4 +1,4 @@
-use std::error::Error;
+use anyhow::{anyhow, Result};
 use std::fs;
 use std::path::Path;
 
@@ -6,12 +6,16 @@ mod contracts;
 use contracts::client::Request;
 use contracts::service::Contracts;
 
-const CONTRACTS_DEST_DIR: &str = "./contracts";
+pub const CONTRACTS_DEST_DIR: &str = "./contracts";
 
-pub fn just_do_it(api_key: String, contract_address: String) -> Result<(), Box<dyn Error>> {
+pub fn download_source_code_files(
+    api_key: String,
+    api_url: String,
+    contract_address: String,
+) -> Result<()> {
     let http_client = reqwest::blocking::Client::new();
 
-    let contracts_client = contracts::client::Client::new(http_client, api_key);
+    let contracts_client = contracts::client::Client::new(api_key, api_url, http_client);
 
     let contracts_service = contracts::service::Service::new(&contracts_client);
 
@@ -25,16 +29,33 @@ pub fn just_do_it(api_key: String, contract_address: String) -> Result<(), Box<d
             p = p.strip_prefix("/")?;
         }
 
-        // make sure all dirs in path exist
-        let contract_dir = Path::new(CONTRACTS_DEST_DIR).join(p.parent().unwrap());
-        fs::create_dir_all(&contract_dir)?;
-
-        // create solidity file
         if p.file_name().is_none() {
-            return Err(From::from("failed to get file name"));
+            return Err(anyhow!("failed to get file name from path: {:?}", p));
         }
 
-        let contract_file_path = contract_dir.join(p.file_name().unwrap());
+        let mut file_name = p.file_name().unwrap().to_str().unwrap();
+        let mut tmp: String;
+        if p.extension().is_none() {
+            tmp = String::from(file_name);
+            tmp.push_str(".sol");
+            file_name = tmp.as_str();
+        }
+
+        // create dirs in Solidity file's path
+        if p.parent().is_none() {
+            return Err(anyhow!(
+                "failed to get path without file name from path: {:?}",
+                p
+            ));
+        }
+
+        let contract_dir = Path::new(CONTRACTS_DEST_DIR)
+            .join(&contract_address)
+            .join(p.parent().unwrap());
+        fs::create_dir_all(&contract_dir)?;
+
+        // create Solidity file
+        let contract_file_path = contract_dir.join(file_name);
         fs::write(contract_file_path, &c.code)?;
     }
 
