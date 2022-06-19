@@ -8,11 +8,7 @@ use contracts::service::Contracts;
 
 pub const CONTRACTS_DEST_DIR: &str = "./contracts";
 
-pub fn download_source_code_files(
-    api_key: String,
-    api_url: String,
-    contract_address: String,
-) -> Result<()> {
+pub fn go(api_key: String, api_url: String, contract_address: String) -> Result<()> {
     let http_client = reqwest::blocking::Client::new();
 
     let contracts_client = contracts::client::Client::new(api_key, api_url, http_client);

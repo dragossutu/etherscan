@@ -21,5 +21,5 @@ fn main() -> Result<()> {
     let api_key =
         fs::read_to_string(&args.api_key_file_path).context("failed to read API key file")?;
 
-    esctl::download_source_code_files(api_key, args.api_url, args.contract_address)
+    scancli::go(api_key, args.api_url, args.contract_address)
 }

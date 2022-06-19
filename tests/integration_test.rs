@@ -112,11 +112,7 @@ fn do_success_test(api_key: &str, t: &TestCase) {
 
     let api_url = server_url();
 
-    let r = esctl::download_source_code_files(
-        api_key.to_string(),
-        api_url,
-        t.contract_address.to_string(),
-    );
+    let r = scancli::go(api_key.to_string(), api_url, t.contract_address.to_string());
     assert!(r.is_ok(), "just_do_it() call return is not OK");
 
     // assert http server was called
@@ -127,7 +123,7 @@ fn do_success_test(api_key: &str, t: &TestCase) {
         .files_relative_paths
         .iter()
         .map(|p| {
-            Path::new(esctl::CONTRACTS_DEST_DIR)
+            Path::new(scancli::CONTRACTS_DEST_DIR)
                 .join(t.contract_address)
                 .join(p)
         })
@@ -141,7 +137,7 @@ fn do_success_test(api_key: &str, t: &TestCase) {
         Err(e) => panic!("failed to read file {:?}", e),
         Ok(c) => c,
     };
-    let actual_file_path = Path::new(esctl::CONTRACTS_DEST_DIR)
+    let actual_file_path = Path::new(scancli::CONTRACTS_DEST_DIR)
         .join(t.contract_address)
         .join(t.comparison_contract_path_actual);
     let actual_file_contents = match fs::read_to_string(actual_file_path) {
@@ -154,7 +150,7 @@ fn do_success_test(api_key: &str, t: &TestCase) {
     );
 
     // remove files to clean up after test
-    let test_files_dir = Path::new(esctl::CONTRACTS_DEST_DIR).join(t.contract_address);
+    let test_files_dir = Path::new(scancli::CONTRACTS_DEST_DIR).join(t.contract_address);
     assert!(
         fs::remove_dir_all(&test_files_dir).is_ok(),
         "failed to remove test files dir {:?}",
