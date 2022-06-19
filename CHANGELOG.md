@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/dragossutu/scancli/compare/1.3.0...1.3.1) (2022-06-19)
+
+
+### Bug Fixes
+
+* **#6:** Make contract address CLI arg posistional again. ([c22c000](https://github.com/dragossutu/scancli/commit/c22c0001f9f8eb1b307d763e535b401f9d0063a6)), closes [#6](https://github.com/dragossutu/scancli/issues/6) [#6](https://github.com/dragossutu/scancli/issues/6)
+
 # [1.3.0](https://github.com/dragossutu/scancli/compare/1.2.0...1.3.0) (2022-06-19)
 
 
