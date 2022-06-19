@@ -1,4 +1,6 @@
+use assert_cmd::Command;
 use mockito::{mock, server_url};
+use pretty_assertions::assert_eq;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -12,8 +14,6 @@ struct TestCase<'a> {
 
 #[test]
 fn it_calls_api_successfully() {
-    let api_key = "669b35403c19957a2a295f130e4bc6936c";
-
     let test_cases = [
         TestCase {
             api_response_body: r#"{
@@ -93,11 +93,14 @@ fn it_calls_api_successfully() {
     ];
 
     for t in test_cases {
-        do_success_test(api_key, &t);
+        test_success(&t);
     }
 }
 
-fn do_success_test(api_key: &str, t: &TestCase) {
+fn test_success(t: &TestCase) {
+    let api_key = "669b35403c19957a2a295f1308aa583371";
+    let files_dest_path = "./tests_contracts";
+
     let q = format!(
         "module=contract&action=getsourcecode&address={}&apikey={}",
         t.contract_address, api_key
@@ -112,8 +115,15 @@ fn do_success_test(api_key: &str, t: &TestCase) {
 
     let api_url = server_url();
 
-    let r = scancli::go(api_key.to_string(), api_url, t.contract_address.to_string());
-    assert!(r.is_ok(), "just_do_it() call return is not OK");
+    let mut cmd = Command::cargo_bin("scancli").unwrap();
+    cmd.arg(t.contract_address)
+        .arg("--api-key")
+        .arg(api_key)
+        .arg("--api-url")
+        .arg(api_url)
+        .arg("--files-dest-path")
+        .arg(files_dest_path)
+        .unwrap();
 
     // assert http server was called
     _m.assert();
@@ -122,11 +132,7 @@ fn do_success_test(api_key: &str, t: &TestCase) {
     let expected_files_paths: Vec<PathBuf> = t
         .files_relative_paths
         .iter()
-        .map(|p| {
-            Path::new(scancli::CONTRACTS_DEST_DIR)
-                .join(t.contract_address)
-                .join(p)
-        })
+        .map(|p| Path::new(files_dest_path).join(t.contract_address).join(p))
         .collect();
     for p in expected_files_paths {
         assert!(p.exists(), "expected solidity file was not created {:?}", p);
@@ -137,7 +143,7 @@ fn do_success_test(api_key: &str, t: &TestCase) {
         Err(e) => panic!("failed to read file {:?}", e),
         Ok(c) => c,
     };
-    let actual_file_path = Path::new(scancli::CONTRACTS_DEST_DIR)
+    let actual_file_path = Path::new(files_dest_path)
         .join(t.contract_address)
         .join(t.comparison_contract_path_actual);
     let actual_file_contents = match fs::read_to_string(actual_file_path) {
@@ -150,7 +156,7 @@ fn do_success_test(api_key: &str, t: &TestCase) {
     );
 
     // remove files to clean up after test
-    let test_files_dir = Path::new(scancli::CONTRACTS_DEST_DIR).join(t.contract_address);
+    let test_files_dir = Path::new(files_dest_path).join(t.contract_address);
     assert!(
         fs::remove_dir_all(&test_files_dir).is_ok(),
         "failed to remove test files dir {:?}",
