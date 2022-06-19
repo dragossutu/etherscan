@@ -1,33 +1,28 @@
-use anyhow::Result;
+use std::fs;
+use anyhow::{Context, Result};
 use clap::Parser;
 use log::info;
 
 #[derive(Parser)]
 struct Args {
+    #[clap(default_value = "./etherscan-api-key.txt", long, short = 'k')]
+    api_key_file_path: String,
+    #[clap(default_value = "https://api.etherscan.io", long, short = 'u')]
+    api_url: String,
+    #[clap(long, short = 'a')]
     contract_address: String,
-    #[clap(short, long)]
-    api_key_file_path: Option<String>,
 }
-
-const ETHERSCAN_API_KEY_FILE_PATH: &str = "./etherscan-api-key.txt";
-const ETHERSCAN_API_URL: &str = "https://api.etherscan.io";
 
 fn main() -> Result<()> {
     info!("start up");
 
     let args = Args::parse();
 
-    // use default value for api_key_file_path if no value was passed to CLI
-    let api_key_file_path = match &args.api_key_file_path {
-        Some(_path) => _path,
-        None => ETHERSCAN_API_KEY_FILE_PATH,
-    };
-
-    let api_key = std::fs::read_to_string(api_key_file_path)?;
+    let api_key = fs::read_to_string(&args.api_key_file_path).context("failed to read API key file")?;
 
     esctl::download_source_code_files(
         api_key,
-        ETHERSCAN_API_URL.to_string(),
+        args.api_url,
         args.contract_address,
     )
 }

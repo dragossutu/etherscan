@@ -1,6 +1,6 @@
-use anyhow::{anyhow, Context, Result};
 use std::fs;
 use std::path::Path;
+use anyhow::{anyhow, Context, Result};
 
 mod contracts;
 use contracts::client::Request;

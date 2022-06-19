@@ -1,7 +1,7 @@
+use std::vec::Vec;
 use anyhow::{anyhow, Context, Result};
 use reqwest::blocking::Client as ReqwestClient;
 use serde::Deserialize;
-use std::vec::Vec;
 
 #[cfg_attr(test, mockall::automock)]
 pub(crate) trait Request {

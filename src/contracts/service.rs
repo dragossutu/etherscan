@@ -1,7 +1,7 @@
-use crate::Request;
+use std::collections::HashMap;
 use anyhow::{Context, Result};
 use serde::Deserialize;
-use std::collections::HashMap;
+use crate::Request;
 
 pub(crate) trait Contracts {
     fn get_contracts(&self, contract_address: &str) -> Result<Vec<Contract>>;
