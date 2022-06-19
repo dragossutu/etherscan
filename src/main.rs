@@ -1,16 +1,16 @@
-use anyhow::{Context, Result};
+use anyhow::Result;
 use clap::Parser;
 use log::info;
-use std::fs;
 
 #[derive(Parser)]
 struct Args {
-    #[clap(default_value = "./etherscan-api-key.txt", long, short = 'k')]
-    api_key_file_path: String,
+    #[clap(env = "SCAN_API_KEY", long, short = 'k')]
+    api_key: String,
     #[clap(default_value = "https://api.etherscan.io", long, short = 'u')]
     api_url: String,
-    #[clap(long, short = 'a')]
     contract_address: String,
+    #[clap(default_value = "./contracts", long, short = 'd')]
+    files_dest_path: String,
 }
 
 fn main() -> Result<()> {
@@ -18,8 +18,10 @@ fn main() -> Result<()> {
 
     let args = Args::parse();
 
-    let api_key =
-        fs::read_to_string(&args.api_key_file_path).context("failed to read API key file")?;
-
-    scancli::go(api_key, args.api_url, args.contract_address)
+    scancli::go(
+        args.api_key,
+        args.api_url,
+        args.contract_address,
+        args.files_dest_path,
+    )
 }
