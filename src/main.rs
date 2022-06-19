@@ -1,7 +1,7 @@
-use std::fs;
 use anyhow::{Context, Result};
 use clap::Parser;
 use log::info;
+use std::fs;
 
 #[derive(Parser)]
 struct Args {
@@ -18,11 +18,8 @@ fn main() -> Result<()> {
 
     let args = Args::parse();
 
-    let api_key = fs::read_to_string(&args.api_key_file_path).context("failed to read API key file")?;
+    let api_key =
+        fs::read_to_string(&args.api_key_file_path).context("failed to read API key file")?;
 
-    esctl::download_source_code_files(
-        api_key,
-        args.api_url,
-        args.contract_address,
-    )
+    esctl::download_source_code_files(api_key, args.api_url, args.contract_address)
 }
