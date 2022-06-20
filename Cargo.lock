@@ -949,7 +949,7 @@ checksum = "f3f6f92acf49d1b98f7a81226834412ada05458b7364277387724a237f062695"
 
 [[package]]
 name = "scancli"
-version = "1.3.0"
+version = "1.3.2"
 dependencies = [
  "anyhow",
  "assert_cmd",

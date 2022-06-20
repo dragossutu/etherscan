@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/dragossutu/scancli/compare/1.3.1...1.3.2) (2022-06-20)
+
+
+### Bug Fixes
+
+* **#9:** Update semantic-release config to run cargo check and commit Cargo.lock file also on release ([388d4ad](https://github.com/dragossutu/scancli/commit/388d4ade98c2e67af21389d7f89930f4fdb1c0d4)), closes [#9](https://github.com/dragossutu/scancli/issues/9)
+
 ## [1.3.1](https://github.com/dragossutu/scancli/compare/1.3.0...1.3.1) (2022-06-19)
 
 
