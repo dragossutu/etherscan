@@ -9,7 +9,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "toml set --toml-path Cargo.toml package.version ${nextRelease.version}"
+        "prepareCmd": "toml set --toml-path Cargo.toml package.version ${nextRelease.version} && cargo check"
       }
     ],
     [
@@ -17,6 +17,7 @@
       {
         "assets": [
           "Cargo.toml",
+          "Cargo.lock",
           "CHANGELOG.md"
         ]
       }
