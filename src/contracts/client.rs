@@ -1,6 +1,7 @@
 use anyhow::{anyhow, Context, Result};
 use reqwest::blocking::Client as ReqwestClient;
 use serde::Deserialize;
+use std::collections::HashMap;
 use std::vec::Vec;
 
 #[cfg_attr(test, mockall::automock)]
@@ -15,12 +16,46 @@ pub(crate) struct Client {
 }
 
 impl Client {
-    pub(crate) fn new(api_key: String, api_url: String, http_client: ReqwestClient) -> Client {
-        Client {
+    pub(crate) fn new(
+        api_key: String,
+        _api_url: Option<String>,
+        http_client: ReqwestClient,
+        network: &str,
+    ) -> Result<Client> {
+        let networks = HashMap::from([
+            ("arbitrum", "https://api.arbiscan.io"),
+            ("aurora", "https://api.aurorascan.dev"),
+            ("avalanche", "https://api.snowtrace.io"),
+            ("bsc", "https://api.bscscan.com"),
+            ("bttc", "https://api.bttcscan.com"),
+            ("celo", "https://api.celoscan.xyz"),
+            ("clv", "https://api.clvscan.com"),
+            ("cronos", "https://api.cronoscan.com"),
+            ("ethereum", "https://api.etherscan.io"),
+            ("fantom", "https://api.ftmscan.com"),
+            ("heco", "https://api.hecoinfo.com"),
+            ("optimism", "https://api-optimistic.etherscan.io"),
+            ("moonbeam", "https://api-moonbeam.moonscan.io"),
+            ("moonriver", "https://api-moonriver.moonscan.io"),
+            ("polygon", "https://api.polygonscan.com"),
+        ]);
+
+        let api_url: String;
+
+        if _api_url.is_some() {
+            api_url = _api_url.unwrap();
+        } else {
+            api_url = match networks.get(network) {
+                Some(x) => x.to_string(),
+                None => return Err(anyhow!("network not found in list of known networks")),
+            };
+        }
+
+        Ok(Client {
             api_key,
             api_url,
             http_client,
-        }
+        })
     }
 }
 
@@ -113,9 +148,15 @@ mod tests {
             .expect(1)
             .create();
 
-        let api_url = server_url();
+        let api_url = Option::Some(server_url());
 
-        let client = Client::new(api_key.to_string(), api_url, ReqwestClient::new());
+        let client = Client::new(
+            api_key.to_string(),
+            api_url,
+            ReqwestClient::new(),
+            "some_network",
+        )
+        .expect("client new");
 
         // when
         let r = client.get_source_code(&contract_address);
@@ -156,9 +197,15 @@ mod tests {
             .expect(1)
             .create();
 
-        let api_url = server_url();
+        let api_url = Option::Some(server_url());
 
-        let client = Client::new(api_key.to_string(), api_url, ReqwestClient::new());
+        let client = Client::new(
+            api_key.to_string(),
+            api_url,
+            ReqwestClient::new(),
+            "some_network",
+        )
+        .expect("client new");
 
         // when
         let r = client.get_source_code(&contract_address);
