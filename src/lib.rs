@@ -10,13 +10,15 @@ pub const CONTRACTS_DEST_DIR: &str = "./contracts";
 
 pub fn go(
     api_key: String,
-    api_url: String,
+    api_url: Option<String>,
     contract_address: String,
     files_dest_path: String,
+    network: &str,
 ) -> Result<()> {
     let http_client = reqwest::blocking::Client::new();
 
-    let contracts_client = contracts::client::Client::new(api_key, api_url, http_client);
+    let contracts_client = contracts::client::Client::new(api_key, api_url, http_client, network)
+        .context("failed to create HTTP client")?;
 
     let contracts_service = contracts::service::Service::new(&contracts_client);
 
@@ -55,6 +57,7 @@ pub fn go(
         }
 
         let contract_dir = Path::new(&files_dest_path)
+            .join(&network)
             .join(&contract_address)
             .join(p.parent().unwrap());
         fs::create_dir_all(&contract_dir).context("failed to create contracts dir")?;

@@ -10,6 +10,7 @@ struct TestCase<'a> {
     comparison_contract_path_expected: &'static str,
     contract_address: &'static str,
     files_relative_paths: &'a [&'static str],
+    network: &'static str,
 }
 
 #[test]
@@ -62,6 +63,7 @@ fn it_calls_api_successfully() {
                 "@openzeppelin/contracts/utils/Strings.sol",
                 "contracts/main/Land.sol",
             ],
+            network: "ethereum",
         },
         TestCase {
             api_response_body: r#"{
@@ -89,6 +91,7 @@ fn it_calls_api_successfully() {
             comparison_contract_path_expected: "./tests/Uni.sol",
             contract_address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
             files_relative_paths: &["Uni.sol"],
+            network: "ethereum",
         },
     ];
 
@@ -132,7 +135,12 @@ fn test_success(t: &TestCase) {
     let expected_files_paths: Vec<PathBuf> = t
         .files_relative_paths
         .iter()
-        .map(|p| Path::new(files_dest_path).join(t.contract_address).join(p))
+        .map(|p| {
+            Path::new(files_dest_path)
+                .join(t.network)
+                .join(t.contract_address)
+                .join(p)
+        })
         .collect();
     for p in expected_files_paths {
         assert!(p.exists(), "expected solidity file was not created {:?}", p);
@@ -144,6 +152,7 @@ fn test_success(t: &TestCase) {
         Ok(c) => c,
     };
     let actual_file_path = Path::new(files_dest_path)
+        .join(t.network)
         .join(t.contract_address)
         .join(t.comparison_contract_path_actual);
     let actual_file_contents = match fs::read_to_string(actual_file_path) {
@@ -156,7 +165,9 @@ fn test_success(t: &TestCase) {
     );
 
     // remove files to clean up after test
-    let test_files_dir = Path::new(files_dest_path).join(t.contract_address);
+    let test_files_dir = Path::new(files_dest_path)
+        .join(t.network)
+        .join(t.contract_address);
     assert!(
         fs::remove_dir_all(&test_files_dir).is_ok(),
         "failed to remove test files dir {:?}",
