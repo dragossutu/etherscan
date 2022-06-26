@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/dragossutu/scancli/compare/1.3.2...1.4.0) (2022-06-26)
+
+
+### Features
+
+* **#8:** Add network CLI arg to be able to download contracts from main networks of all the blockchains that use the etherscan block explorer implementation. Add CLI args descriptions. ([d3ff8cd](https://github.com/dragossutu/scancli/commit/d3ff8cd9f998dc2ecfe696719a23b5f0777824a4)), closes [#8](https://github.com/dragossutu/scancli/issues/8)
+* **#8:** Remove api key file from gitignore ([e461c29](https://github.com/dragossutu/scancli/commit/e461c29482583f998a852973cb275c6f27e8e198)), closes [#8](https://github.com/dragossutu/scancli/issues/8)
+
 ## [1.3.2](https://github.com/dragossutu/scancli/compare/1.3.1...1.3.2) (2022-06-20)
 
 
