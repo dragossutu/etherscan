@@ -1,9 +1,10 @@
+use std::collections::HashMap;
+use std::fs;
+use std::path::Path;
 use anyhow::{anyhow, Context, Result};
 use clap::Parser;
 use log::info;
 use reqwest::blocking::Client as ReqwestClient;
-use std::fs;
-use std::path::Path;
 
 mod contracts;
 use contracts::client::{Client, Request};
@@ -77,10 +78,37 @@ fn main() -> Result<()> {
         Network::Polygon => "polygon",
     };
 
+    let networks_to_urls = HashMap::from([
+        ("arbitrum", "https://api.arbiscan.io"),
+        ("aurora", "https://api.aurorascan.dev"),
+        ("avalanche", "https://api.snowtrace.io"),
+        ("bsc", "https://api.bscscan.com"),
+        ("bttc", "https://api.bttcscan.com"),
+        ("celo", "https://api.celoscan.xyz"),
+        ("clv", "https://api.clvscan.com"),
+        ("cronos", "https://api.cronoscan.com"),
+        ("ethereum", "https://api.etherscan.io"),
+        ("fantom", "https://api.ftmscan.com"),
+        ("heco", "https://api.hecoinfo.com"),
+        ("optimism", "https://api-optimistic.etherscan.io"),
+        ("moonbeam", "https://api-moonbeam.moonscan.io"),
+        ("moonriver", "https://api-moonriver.moonscan.io"),
+        ("polygon", "https://api.polygonscan.com"),
+    ]);
+
+    let _api_url: String;
+    if args.api_url.is_some() {
+        _api_url = args.api_url.unwrap();
+    } else {
+        _api_url = match networks_to_urls.get(network) {
+            Some(x) => x.to_string(),
+            None => return Err(anyhow!("network not found in list of known networks")),
+        };
+    }
+
     let http_client = ReqwestClient::new();
 
-    let contracts_client = Client::new(args.api_key, args.api_url, http_client, network)
-        .context("failed to create HTTP client")?;
+    let contracts_client = Client::new(args.api_key, _api_url, http_client);
 
     let contracts_service = Service::new(&contracts_client);
 
