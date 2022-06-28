@@ -5,18 +5,18 @@ use std::collections::HashMap;
 use std::vec::Vec;
 
 #[cfg_attr(test, mockall::automock)]
-pub(crate) trait Request {
+pub trait Request {
     fn get_source_code(&self, contract_address: &str) -> Result<Vec<ContractInfo>>;
 }
 
-pub(crate) struct Client {
+pub struct Client {
     api_key: String,
     api_url: String,
     http_client: ReqwestClient,
 }
 
 impl Client {
-    pub(crate) fn new(
+    pub fn new(
         api_key: String,
         _api_url: Option<String>,
         http_client: ReqwestClient,
@@ -93,7 +93,7 @@ struct ResponseBody {
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct ContractInfo {
+pub struct ContractInfo {
     // #[serde(alias = "ABI")]
     // abi: String,
     #[serde(alias = "ContractName")]
