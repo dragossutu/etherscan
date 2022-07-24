@@ -1,40 +1,40 @@
-# [1.5.0](https://github.com/dragossutu/scancli/compare/1.4.0...1.5.0) (2022-07-24)
+# [1.5.0](https://github.com/dragossutu/etherscan/compare/1.4.0...1.5.0) (2022-07-24)
 
 
 ### Features
 
-* **#12:** Move networks to API URLs hashmap from client to main ([8fae61f](https://github.com/dragossutu/scancli/commit/8fae61f66b61285305b2da1d2d37454bdd78bd28)), closes [#12](https://github.com/dragossutu/scancli/issues/12)
-* **#12:** Remove unnecessary lib.rs, move lib code to main ([cf51694](https://github.com/dragossutu/scancli/commit/cf516949aa5266cace0c568cb288a087f0ad1671)), closes [#12](https://github.com/dragossutu/scancli/issues/12)
-* **#12:** Replace networks HashMap with match block, replace Strings with &str in Client, update CLI args descriptions ([2c25a89](https://github.com/dragossutu/scancli/commit/2c25a8970a2696b207a1b5b2808f6344262595d1)), closes [#12](https://github.com/dragossutu/scancli/issues/12)
+* **#12:** Move networks to API URLs hashmap from client to main ([8fae61f](https://github.com/dragossutu/etherscan/commit/8fae61f66b61285305b2da1d2d37454bdd78bd28)), closes [#12](https://github.com/dragossutu/etherscan/issues/12)
+* **#12:** Remove unnecessary lib.rs, move lib code to main ([cf51694](https://github.com/dragossutu/etherscan/commit/cf516949aa5266cace0c568cb288a087f0ad1671)), closes [#12](https://github.com/dragossutu/etherscan/issues/12)
+* **#12:** Replace networks HashMap with match block, replace Strings with &str in Client, update CLI args descriptions ([2c25a89](https://github.com/dragossutu/etherscan/commit/2c25a8970a2696b207a1b5b2808f6344262595d1)), closes [#12](https://github.com/dragossutu/etherscan/issues/12)
 
-# [1.4.0](https://github.com/dragossutu/scancli/compare/1.3.2...1.4.0) (2022-06-26)
+# [1.4.0](https://github.com/dragossutu/etherscan/compare/1.3.2...1.4.0) (2022-06-26)
 
 
 ### Features
 
-* **#8:** Add network CLI arg to be able to download contracts from main networks of all the blockchains that use the etherscan block explorer implementation. Add CLI args descriptions. ([d3ff8cd](https://github.com/dragossutu/scancli/commit/d3ff8cd9f998dc2ecfe696719a23b5f0777824a4)), closes [#8](https://github.com/dragossutu/scancli/issues/8)
-* **#8:** Remove api key file from gitignore ([e461c29](https://github.com/dragossutu/scancli/commit/e461c29482583f998a852973cb275c6f27e8e198)), closes [#8](https://github.com/dragossutu/scancli/issues/8)
+* **#8:** Add network CLI arg to be able to download contracts from main networks of all the blockchains that use the etherscan block explorer implementation. Add CLI args descriptions. ([d3ff8cd](https://github.com/dragossutu/etherscan/commit/d3ff8cd9f998dc2ecfe696719a23b5f0777824a4)), closes [#8](https://github.com/dragossutu/etherscan/issues/8)
+* **#8:** Remove api key file from gitignore ([e461c29](https://github.com/dragossutu/etherscan/commit/e461c29482583f998a852973cb275c6f27e8e198)), closes [#8](https://github.com/dragossutu/etherscan/issues/8)
 
-## [1.3.2](https://github.com/dragossutu/scancli/compare/1.3.1...1.3.2) (2022-06-20)
+## [1.3.2](https://github.com/dragossutu/etherscan/compare/1.3.1...1.3.2) (2022-06-20)
 
 
 ### Bug Fixes
 
-* **#9:** Update semantic-release config to run cargo check and commit Cargo.lock file also on release ([388d4ad](https://github.com/dragossutu/scancli/commit/388d4ade98c2e67af21389d7f89930f4fdb1c0d4)), closes [#9](https://github.com/dragossutu/scancli/issues/9)
+* **#9:** Update semantic-release config to run cargo check and commit Cargo.lock file also on release ([388d4ad](https://github.com/dragossutu/etherscan/commit/388d4ade98c2e67af21389d7f89930f4fdb1c0d4)), closes [#9](https://github.com/dragossutu/etherscan/issues/9)
 
-## [1.3.1](https://github.com/dragossutu/scancli/compare/1.3.0...1.3.1) (2022-06-19)
+## [1.3.1](https://github.com/dragossutu/etherscan/compare/1.3.0...1.3.1) (2022-06-19)
 
 
 ### Bug Fixes
 
-* **#6:** Make contract address CLI arg posistional again. ([c22c000](https://github.com/dragossutu/scancli/commit/c22c0001f9f8eb1b307d763e535b401f9d0063a6)), closes [#6](https://github.com/dragossutu/scancli/issues/6) [#6](https://github.com/dragossutu/scancli/issues/6)
+* **#6:** Make contract address CLI arg posistional again. ([c22c000](https://github.com/dragossutu/etherscan/commit/c22c0001f9f8eb1b307d763e535b401f9d0063a6)), closes [#6](https://github.com/dragossutu/etherscan/issues/6) [#6](https://github.com/dragossutu/etherscan/issues/6)
 
-# [1.3.0](https://github.com/dragossutu/scancli/compare/1.2.0...1.3.0) (2022-06-19)
+# [1.3.0](https://github.com/dragossutu/etherscan/compare/1.2.0...1.3.0) (2022-06-19)
 
 
 ### Features
 
-* **rename-crate:** Rename crate, repo and lib function ([8f3f505](https://github.com/dragossutu/scancli/commit/8f3f505c992ce42bcd6e823a63bfd8b6e80a98a3))
+* **rename-crate:** Rename crate, repo and lib function ([8f3f505](https://github.com/dragossutu/etherscan/commit/8f3f505c992ce42bcd6e823a63bfd8b6e80a98a3))
 
 # [1.2.0](https://github.com/dragossutu/esctl/compare/1.1.0...1.2.0) (2022-06-19)
 
