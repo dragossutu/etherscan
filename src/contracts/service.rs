@@ -47,8 +47,8 @@ where
             }
 
             // `source_code_raw` is a string containing either:
-            // - a single contract file's code
-            // - or a JSON with multiple files' code
+            // - all the contract code, that uploaded from a single file
+            // - or a JSON with the contract code split into multiple files
             match serde_json::from_str(&source_code_raw) {
                 Err(e) => {
                     if e.is_syntax() && e.line() == 1 && e.column() == 1 {

@@ -1,10 +1,9 @@
-use std::collections::HashMap;
-use std::fs;
-use std::path::Path;
 use anyhow::{anyhow, Context, Result};
-use clap::Parser;
+use clap::{ArgEnum, Parser};
 use log::info;
 use reqwest::blocking::Client as ReqwestClient;
+use std::fs;
+use std::path::Path;
 
 mod contracts;
 use contracts::client::{Client, Request};
@@ -15,28 +14,37 @@ pub const CONTRACTS_DEST_DIR: &str = "./contracts";
 #[derive(Parser)]
 #[clap(about, version)]
 struct Args {
-    #[clap(env = "SCAN_API_KEY", long, short = 'k')]
-    /// The API key for the block explorer.
-    /// It will be read from the environment variable SCAN_API_KEY first
+    #[clap(env = "ETHERSCAN_API_KEY", long, short = 'k')]
+    /// The API key for the block explorer
+    ///
+    /// It will be read from the environment variable ETHERSCAN_API_KEY first
     api_key: String,
+
     #[clap(long, short = 'u')]
-    /// The URL of the block explorer's API, e.g. https://api.etherscan.io. Used for tests only.
-    /// If passed in, the `network` argument is ignored
+    /// Used for tests only. The URL of the block explorer's API
+    ///
+    /// e.g. https://api.etherscan.io. If passed in, the `network` argument is ignored
     api_url: Option<String>,
+
     /// Address of the contract to download files for
     contract_address: String,
+
     #[clap(default_value = "./contracts", long, short = 'd')]
-    /// Local path to the folder where the contract's files will be created.
+    /// Local path to the folder where the contract's files will be created
+    ///
     /// Folder will be created if it doesn't exist
     files_dest_path: String,
-    #[clap(default_value_t = Network::Ethereum, long, value_enum)]
-    /// The name of the network.
-    /// Must match the block explorer that the API key is for. e.g arbitrum will make requests to
-    /// https://api.arbiscan.io, so the API key must be for https://api.arbiscan.io
+
+    #[clap(arg_enum, default_value_t = Network::Ethereum, long, short, value_parser)]
+    /// The name of the network
+    ///
+    /// Must match the block explorer that the API key is for.
+    /// e.g if network = arbitrum, the CLI will make requests to https://api.arbiscan.io,
+    /// so the API key must be for https://api.arbiscan.io
     network: Network,
 }
 
-#[derive(clap::ValueEnum, Clone, Debug)]
+#[derive(ArgEnum, Clone)]
 enum Network {
     Arbitrum,
     Aurora,
@@ -60,55 +68,31 @@ fn main() -> Result<()> {
 
     let args = Args::parse();
 
-    let network = match args.network {
-        Network::Arbitrum => "arbitrum",
-        Network::Aurora => "aurora",
-        Network::Avalanche => "avalanche",
-        Network::Bsc => "bsc",
-        Network::Bttc => "bttc",
-        Network::Celo => "celo",
-        Network::Clv => "clv",
-        Network::Cronos => "cronos",
-        Network::Ethereum => "ethereum",
-        Network::Fantom => "fantom",
-        Network::Heco => "heco",
-        Network::Optimism => "optimism",
-        Network::Moonbeam => "moonbeam",
-        Network::Moonriver => "moonriver",
-        Network::Polygon => "polygon",
+    let (network_name, mut api_url) = match args.network {
+        Network::Arbitrum => ("arbitrum", "https://api.arbiscan.io"),
+        Network::Aurora => ("aurora", "https://api.aurorascan.dev"),
+        Network::Avalanche => ("avalanche", "https://api.snowtrace.io"),
+        Network::Bsc => ("bsc", "https://api.bscscan.com"),
+        Network::Bttc => ("bttc", "https://api.bttcscan.com"),
+        Network::Celo => ("celo", "https://api.celoscan.xyz"),
+        Network::Clv => ("clv", "https://api.clvscan.com"),
+        Network::Cronos => ("cronos", "https://api.cronoscan.com"),
+        Network::Ethereum => ("ethereum", "https://api.etherscan.io"),
+        Network::Fantom => ("fantom", "https://api.ftmscan.com"),
+        Network::Heco => ("heco", "https://api.hecoinfo.com"),
+        Network::Optimism => ("optimism", "https://api-optimistic.etherscan.io"),
+        Network::Moonbeam => ("moonbeam", "https://api-moonbeam.moonscan.io"),
+        Network::Moonriver => ("moonriver", "https://api-moonriver.moonscan.io"),
+        Network::Polygon => ("polygon", "https://api.polygonscan.com"),
     };
 
-    let networks_to_urls = HashMap::from([
-        ("arbitrum", "https://api.arbiscan.io"),
-        ("aurora", "https://api.aurorascan.dev"),
-        ("avalanche", "https://api.snowtrace.io"),
-        ("bsc", "https://api.bscscan.com"),
-        ("bttc", "https://api.bttcscan.com"),
-        ("celo", "https://api.celoscan.xyz"),
-        ("clv", "https://api.clvscan.com"),
-        ("cronos", "https://api.cronoscan.com"),
-        ("ethereum", "https://api.etherscan.io"),
-        ("fantom", "https://api.ftmscan.com"),
-        ("heco", "https://api.hecoinfo.com"),
-        ("optimism", "https://api-optimistic.etherscan.io"),
-        ("moonbeam", "https://api-moonbeam.moonscan.io"),
-        ("moonriver", "https://api-moonriver.moonscan.io"),
-        ("polygon", "https://api.polygonscan.com"),
-    ]);
-
-    let _api_url: String;
     if args.api_url.is_some() {
-        _api_url = args.api_url.unwrap();
-    } else {
-        _api_url = match networks_to_urls.get(network) {
-            Some(x) => x.to_string(),
-            None => return Err(anyhow!("network not found in list of known networks")),
-        };
+        api_url = args.api_url.as_deref().unwrap();
     }
 
     let http_client = ReqwestClient::new();
 
-    let contracts_client = Client::new(args.api_key, _api_url, http_client);
+    let contracts_client = Client::new(args.api_key.as_str(), api_url, http_client);
 
     let contracts_service = Service::new(&contracts_client);
 
@@ -147,9 +131,10 @@ fn main() -> Result<()> {
         }
 
         let contract_dir = Path::new(&args.files_dest_path)
-            .join(network)
+            .join(network_name)
             .join(&args.contract_address)
             .join(p.parent().unwrap());
+
         fs::create_dir_all(&contract_dir).context("failed to create contracts dir")?;
 
         // create Solidity file

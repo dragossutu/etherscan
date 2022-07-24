@@ -8,14 +8,14 @@ pub trait Request {
     fn get_source_code(&self, contract_address: &str) -> Result<Vec<ContractInfo>>;
 }
 
-pub struct Client {
-    api_key: String,
-    api_url: String,
+pub struct Client<'a> {
+    api_key: &'a str,
+    api_url: &'a str,
     http_client: ReqwestClient,
 }
 
-impl Client {
-    pub fn new(api_key: String, api_url: String, http_client: ReqwestClient) -> Client {
+impl<'a> Client<'a> {
+    pub fn new(api_key: &'a str, api_url: &'a str, http_client: ReqwestClient) -> Client<'a> {
         Client {
             api_key,
             api_url,
@@ -24,7 +24,7 @@ impl Client {
     }
 }
 
-impl Request for Client {
+impl<'a> Request for Client<'a> {
     fn get_source_code(&self, contract_address: &str) -> Result<Vec<ContractInfo>> {
         let url = format!(
             "{}/api?module=contract&action=getsourcecode&address={}&apikey={}",
@@ -59,8 +59,6 @@ struct ResponseBody {
 
 #[derive(Debug, Deserialize)]
 pub struct ContractInfo {
-    // #[serde(alias = "ABI")]
-    // abi: String,
     #[serde(alias = "ContractName")]
     pub(crate) contract_name: String,
     #[serde(alias = "SourceCode")]
@@ -115,11 +113,7 @@ mod tests {
 
         let api_url = server_url();
 
-        let client = Client::new(
-            api_key.to_string(),
-            api_url,
-            ReqwestClient::new()
-        );
+        let client = Client::new(api_key, api_url.as_ref(), ReqwestClient::new());
 
         // when
         let r = client.get_source_code(&contract_address);
@@ -162,11 +156,7 @@ mod tests {
 
         let api_url = server_url();
 
-        let client = Client::new(
-            api_key.to_string(),
-            api_url,
-            ReqwestClient::new(),
-        );
+        let client = Client::new(api_key, api_url.as_ref(), ReqwestClient::new());
 
         // when
         let r = client.get_source_code(&contract_address);
