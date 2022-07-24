@@ -1,6 +1,6 @@
 [package]
 name = "scancli"
-version = "1.4.0"
+version = "1.5.0"
 edition = "2021"
 description = "A CLI app to interact with any etherscan.io compatible API"
 

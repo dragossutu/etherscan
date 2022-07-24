@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/dragossutu/scancli/compare/1.4.0...1.5.0) (2022-07-24)
+
+
+### Features
+
+* **#12:** Move networks to API URLs hashmap from client to main ([8fae61f](https://github.com/dragossutu/scancli/commit/8fae61f66b61285305b2da1d2d37454bdd78bd28)), closes [#12](https://github.com/dragossutu/scancli/issues/12)
+* **#12:** Remove unnecessary lib.rs, move lib code to main ([cf51694](https://github.com/dragossutu/scancli/commit/cf516949aa5266cace0c568cb288a087f0ad1671)), closes [#12](https://github.com/dragossutu/scancli/issues/12)
+* **#12:** Replace networks HashMap with match block, replace Strings with &str in Client, update CLI args descriptions ([2c25a89](https://github.com/dragossutu/scancli/commit/2c25a8970a2696b207a1b5b2808f6344262595d1)), closes [#12](https://github.com/dragossutu/scancli/issues/12)
+
 # [1.4.0](https://github.com/dragossutu/scancli/compare/1.3.2...1.4.0) (2022-06-26)
 
 
