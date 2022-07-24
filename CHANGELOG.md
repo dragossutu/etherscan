@@ -1,3 +1,13 @@
+# [1.6.0](https://github.com/dragossutu/etherscan/compare/1.5.0...1.6.0) (2022-07-24)
+
+
+### Features
+
+* **#14:** Cargo update ([e19a857](https://github.com/dragossutu/etherscan/commit/e19a85709ced4c9cf31b9b2f6f12f7dda2f42eb5)), closes [#14](https://github.com/dragossutu/etherscan/issues/14)
+* **#14:** Rename binary in Changelog URLs ([8c957eb](https://github.com/dragossutu/etherscan/commit/8c957eb6bb4a7736e5b72f628b2214911feae730)), closes [#14](https://github.com/dragossutu/etherscan/issues/14)
+* **#14:** Rename crate ([a714527](https://github.com/dragossutu/etherscan/commit/a714527dade2caaf330f56bb9e3cb1ea00d638b8)), closes [#14](https://github.com/dragossutu/etherscan/issues/14)
+* **#14:** Update binary name in end_to_end test ([4bbdc72](https://github.com/dragossutu/etherscan/commit/4bbdc72fddf7ef5a8258c4b4d9f49cd1d83fd3f7)), closes [#14](https://github.com/dragossutu/etherscan/issues/14)
+
 # [1.5.0](https://github.com/dragossutu/etherscan/compare/1.4.0...1.5.0) (2022-07-24)
 
 
