@@ -118,7 +118,7 @@ fn test_success(t: &TestCase) {
 
     let api_url = server_url();
 
-    let mut cmd = Command::cargo_bin("scancli").unwrap();
+    let mut cmd = Command::cargo_bin("etherscan").unwrap();
     cmd.arg(t.contract_address)
         .arg("--api-key")
         .arg(api_key)
