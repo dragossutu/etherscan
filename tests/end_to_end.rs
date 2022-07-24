@@ -5,12 +5,12 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 struct TestCase<'a> {
-    api_response_body: &'static str,
-    comparison_contract_path_actual: &'static str,
-    comparison_contract_path_expected: &'static str,
-    contract_address: &'static str,
-    files_relative_paths: &'a [&'static str],
-    network: &'static str,
+    api_response_body: &'a str,
+    comparison_contract_path_actual: &'a str,
+    comparison_contract_path_expected: &'a str,
+    contract_address: &'a str,
+    files_relative_paths: &'a [&'a str],
+    network: &'a str,
 }
 
 #[test]

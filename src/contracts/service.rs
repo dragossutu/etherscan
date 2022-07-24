@@ -3,11 +3,11 @@ use anyhow::{Context, Result};
 use serde::Deserialize;
 use std::collections::HashMap;
 
-pub(crate) trait Contracts {
+pub trait Contracts {
     fn get_contracts(&self, contract_address: &str) -> Result<Vec<Contract>>;
 }
 
-pub(crate) struct Service<'a, C>
+pub struct Service<'a, C>
 where
     C: Request,
 {
@@ -18,7 +18,7 @@ impl<'a, C> Service<'a, C>
 where
     C: Request,
 {
-    pub(crate) fn new(client: &C) -> Service<C> {
+    pub fn new(client: &C) -> Service<C> {
         Service { client }
     }
 }
@@ -47,8 +47,8 @@ where
             }
 
             // `source_code_raw` is a string containing either:
-            // - a single contract file's code
-            // - or a JSON with multiple files' code
+            // - all the contract code, that uploaded from a single file
+            // - or a JSON with the contract code split into multiple files
             match serde_json::from_str(&source_code_raw) {
                 Err(e) => {
                     if e.is_syntax() && e.line() == 1 && e.column() == 1 {
@@ -88,9 +88,9 @@ struct Source {
     content: String,
 }
 
-pub(crate) struct Contract {
-    pub(crate) code: String,
-    pub(crate) path: String,
+pub struct Contract {
+    pub code: String,
+    pub path: String,
 }
 
 #[cfg(test)]
