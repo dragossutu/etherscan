@@ -1,8 +1,5 @@
-name: test-and-package
-on:
-  push:
-    branches:
-      - main
+name: test-and-release
+on: [push]
 jobs:
   semantic_release:
     name: semantic release
@@ -10,7 +7,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Install semantic-release, plugins and toml-cli
+      - name: Install rust stable toolchain
+        uses: actions-rs/toolchain@v1
+          target: x86_64-unknown-linux-gnu
+      - name: Install semantic-release and toml-cli
         run: |
           npm install --save-dev \
             semantic-release \
