@@ -10,6 +10,8 @@ jobs:
       - name: Install rust stable toolchain
         uses: actions-rs/toolchain@v1
           target: x86_64-unknown-linux-gnu
+      - name: Run tests
+        run: cargo test -- --nocapture
       - name: Install semantic-release and toml-cli
         run: |
           npm install --save-dev \
