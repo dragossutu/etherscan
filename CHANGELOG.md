@@ -1,3 +1,20 @@
+# [1.7.0](https://github.com/dragossutu/etherscan/compare/1.6.0...1.7.0) (2022-07-29)
+
+
+### Bug Fixes
+
+* **gh-16:** Fix rust toolchain action syntax ([6f4340c](https://github.com/dragossutu/etherscan/commit/6f4340cab80b6b2472e38262e185df9396219f3c))
+
+
+### Features
+
+* **gh-16:** Build Linux x86_64 binary using cargo instead of cross ([8a59173](https://github.com/dragossutu/etherscan/commit/8a591736deeca840a927dee40c235e8dad0e1fb3)), closes [#16](https://github.com/dragossutu/etherscan/issues/16)
+* **gh-16:** Build Linux x86_64 binary using cross ([9b7886c](https://github.com/dragossutu/etherscan/commit/9b7886c8546927bd3676ceb8454a8d10ceca0518)), closes [#16](https://github.com/dragossutu/etherscan/issues/16)
+* **gh-16:** Don't create release in pipeline anymore ([f11d6ba](https://github.com/dragossutu/etherscan/commit/f11d6bae8c27960b06c7bd9e4285101579adff86)), closes [#16](https://github.com/dragossutu/etherscan/issues/16)
+* **gh-16:** Rename Github Actions workflow, run on push on any branch, install rust stable toolchain in pipeline ([d912c3d](https://github.com/dragossutu/etherscan/commit/d912c3d52aa9f1253622003a7887116eff44248a)), closes [#16](https://github.com/dragossutu/etherscan/issues/16)
+* **gh-16:** Run pipeline on main branch only, add Linux x86_64 bianry on release ([8cff25d](https://github.com/dragossutu/etherscan/commit/8cff25d8f88d7bfc7e7914fc06ef9f45ba2bebce)), closes [#16](https://github.com/dragossutu/etherscan/issues/16)
+* **gh-16:** Run tests in pipeline ([23d6ec4](https://github.com/dragossutu/etherscan/commit/23d6ec47821dda840b72c5424a05602a353212ae)), closes [#16](https://github.com/dragossutu/etherscan/issues/16)
+
 # [1.6.0](https://github.com/dragossutu/etherscan/compare/1.5.0...1.6.0) (2022-07-24)
 
 
