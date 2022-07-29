@@ -22,7 +22,18 @@
         ]
       }
     ],
-    "@semantic-release/github"
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "label": "Linux amd64 ${nextRelease.version}",
+            "name": "etherscan-linux-amd64-${nextRelease.version}",
+            "path": "target/x86_64-unknown-linux-gnu/release/etherscan"
+          }
+        ]
+      }
+    ]
   ],
   "tagFormat": "${version}"
 }
