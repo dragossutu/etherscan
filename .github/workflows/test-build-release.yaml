@@ -1,18 +1,26 @@
-name: test-and-release
+name: test-build-release
 on: [push]
 jobs:
-  semantic_release:
-    name: semantic release
+  test_build_release:
+    name: Test build release
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Install rust stable toolchain
+      - name: Install rust stable toolchain for Linux
         uses: actions-rs/toolchain@v1
         with:
+          override: true
           target: x86_64-unknown-linux-gnu
+          toolchain: stable
       - name: Run tests
         run: cargo test -- --nocapture
+      - name: Build Linux binary
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --target=x86_64-unknown-linux-gnu
 #      - name: Install semantic-release and toml-cli
 #        run: |
 #          npm install --save-dev \
