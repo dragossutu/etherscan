@@ -1,3 +1,12 @@
+# [1.8.0](https://github.com/dragossutu/etherscan/compare/1.7.0...1.8.0) (2022-07-30)
+
+
+### Features
+
+* **gh-18:** Change linux target to build for musl, add cross config to use clux/muslrust:stable Docker image for musl build ([082fb8f](https://github.com/dragossutu/etherscan/commit/082fb8fc034e0c403de78bc156134b6d86d36bac)), closes [#18](https://github.com/dragossutu/etherscan/issues/18)
+* **gh-18:** Change linux target to build for musl, add cross config to use clux/muslrust:stable Docker image for musl build ([03a36b8](https://github.com/dragossutu/etherscan/commit/03a36b8db65b4870fdc322285ff7328187549ab0)), closes [#18](https://github.com/dragossutu/etherscan/issues/18)
+* **gh-18:** Change linux target to build for musl, use cross to build and add cross config to use clux/muslrust:stable Docker image for musl build ([fd91b9b](https://github.com/dragossutu/etherscan/commit/fd91b9bc2d4c56841362cc41deca47ba6cc1771d)), closes [#18](https://github.com/dragossutu/etherscan/issues/18)
+
 # [1.7.0](https://github.com/dragossutu/etherscan/compare/1.6.0...1.7.0) (2022-07-29)
 
 
