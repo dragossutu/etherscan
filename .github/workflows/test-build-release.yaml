@@ -14,7 +14,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           override: true
-          target: x86_64-unknown-linux-gnu
+          target: x86_64-unknown-linux-musl
           toolchain: stable
       - name: Run tests
         run: cargo test -- --nocapture
@@ -22,7 +22,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --target=x86_64-unknown-linux-gnu
+          args: --release --target=x86_64-unknown-linux-musl
       - name: Install semantic-release and toml-cli
         run: |
           npm install --save-dev \
