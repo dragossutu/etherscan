@@ -29,7 +29,7 @@
           {
             "label": "Linux amd64 ${nextRelease.version}",
             "name": "etherscan-linux-amd64-${nextRelease.version}",
-            "path": "target/x86_64-unknown-linux-gnu/release/etherscan"
+            "path": "target/x86_64-unknown-linux-musl/release/etherscan"
           }
         ]
       }
