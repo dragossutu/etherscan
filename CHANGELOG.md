@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/dragossutu/etherscan/compare/1.8.0...1.8.1) (2022-07-30)
+
+
+### Bug Fixes
+
+* **gh-18:** Fix binary path in semantic-release config ([963b441](https://github.com/dragossutu/etherscan/commit/963b441db12a04d0631db376cdcbe1202831b1de))
+
 # [1.8.0](https://github.com/dragossutu/etherscan/compare/1.7.0...1.8.0) (2022-07-30)
 
 
