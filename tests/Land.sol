@@ -31,14 +31,14 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
     uint256 public maxMintPerAddress;
     mapping(address => uint256) public mintedPerAddress;
 
-    bool public claimableActive; 
+    bool public claimableActive;
     bool public adminClaimStarted;
-    
-    address public alphaContract; 
+
+    address public alphaContract;
     mapping(uint256 => bool) public alphaClaimed;
     uint256 public alphaClaimedAmount;
 
-    address public betaContract; 
+    address public betaContract;
     mapping(uint256 => bool) public betaClaimed;
     uint256 public betaClaimedAmount;
     uint256 public betaNftIdCurrent;
@@ -58,7 +58,7 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
     mapping(bytes32 => bool) public isRandomRequestForPublicSaleAndContributors;
     bool public publicSaleAndContributorsRandomnessRequested;
     bool public ownerClaimRandomnessRequested;
-    
+
     // constants
     uint256 immutable public MAX_LANDS;
     uint256 immutable public MAX_LANDS_WITH_FUTURE;
@@ -221,15 +221,15 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
 
     // Public Sale Methods
     function startPublicSale(
-        uint256 _publicSalePriceLoweringDuration, 
-        uint256 _publicSaleStartPrice, 
+        uint256 _publicSalePriceLoweringDuration,
+        uint256 _publicSaleStartPrice,
         uint256 _publicSaleEndingPrice,
         uint256 _maxMintPerTx,
         uint256 _maxMintPerAddress,
         bool _isKycCheckRequired
     ) external onlyOperator {
         require(!publicSaleActive, "Public sale has already begun");
-        
+
         publicSalePriceLoweringDuration = _publicSalePriceLoweringDuration;
         publicSaleStartPrice = _publicSaleStartPrice;
         publicSaleEndingPrice = _publicSaleEndingPrice;
@@ -279,7 +279,7 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
         } else {
             require(msg.sender == tx.origin, "Minting from smart contracts is disallowed");
         }
-     
+
         uint256 mintPrice = getMintPrice();
         IERC20(tokenContract).safeTransferFrom(msg.sender, address(this), mintPrice * numLands);
         currentNumLandsMintedPublicSale += numLands;
@@ -325,14 +325,14 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
             uint256 alphaTokenId = alphaTokenIds[i];
             require(!alphaClaimed[alphaTokenId], "ALPHA NFT already claimed");
             require(ERC721(alphaContract).ownerOf(alphaTokenId) == msg.sender, "Must own all of the alpha defined by alphaTokenIds");
-            
-            alphaClaimLandByTokenId(alphaTokenId);    
+
+            alphaClaimLandByTokenId(alphaTokenId);
         }
     }
 
     function alphaClaimLandByTokenId(uint256 alphaTokenId) private {
         alphaClaimed[alphaTokenId] = true;
-        ++alphaClaimedAmount;        
+        ++alphaClaimedAmount;
         _safeMint(msg.sender, alphaTokenId);
     }
 
@@ -341,8 +341,8 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
             uint256 betaTokenId = betaTokenIds[i];
             require(!betaClaimed[betaTokenId], "BETA NFT already claimed");
             require(ERC721(betaContract).ownerOf(betaTokenId) == msg.sender, "Must own all of the beta defined by betaTokenIds");
-            
-            betaClaimLandByTokenId(betaTokenId);    
+
+            betaClaimLandByTokenId(betaTokenId);
         }
     }
 
@@ -389,7 +389,7 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
         //claim beta
         if(betaClaimedAmount < MAX_BETA_NFT_AMOUNT) {
             uint256 leftToBeMinted = MAX_BETA_NFT_AMOUNT - betaClaimedAmount;
-            uint256 toMint = leftToBeMinted < maxAmount ? leftToBeMinted : 
+            uint256 toMint = leftToBeMinted < maxAmount ? leftToBeMinted :
                 maxAmount; //take the min
 
             uint256 target = betaNftIdCurrent + toMint;
@@ -403,10 +403,10 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
         //claim alpha
         if(alphaClaimedAmount < MAX_ALPHA_NFT_AMOUNT) {
             uint256 leftToBeMinted = MAX_ALPHA_NFT_AMOUNT - alphaClaimedAmount;
-            uint256 toMint = maxAmount < leftToBeMinted + totalMinted ? 
+            uint256 toMint = maxAmount < leftToBeMinted + totalMinted ?
                             maxAmount :
                             leftToBeMinted + totalMinted; //summing totalMinted avoid to use another counter
-            
+
             uint256 lastAlphaNft = MAX_ALPHA_NFT_AMOUNT - 1;
             for(uint256 i; i <= lastAlphaNft && totalMinted < toMint; ++i) {
                 if(!alphaClaimed[i]){
@@ -420,15 +420,15 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
 
         //claim unsold
         if(mintIndexPublicSaleAndContributors < MAX_LANDS){
-            uint256 leftToBeMinted = MAX_LANDS - mintIndexPublicSaleAndContributors; 
-            uint256 toMint = maxAmount < leftToBeMinted + totalMinted ? 
+            uint256 leftToBeMinted = MAX_LANDS - mintIndexPublicSaleAndContributors;
+            uint256 toMint = maxAmount < leftToBeMinted + totalMinted ?
                             maxAmount :
                             leftToBeMinted + totalMinted; //summing totalMinted avoid to use another counter
 
             for(; mintIndexPublicSaleAndContributors < MAX_LANDS && totalMinted < toMint; ++mintIndexPublicSaleAndContributors) {
                     ++totalMinted;
                     _safeMint(recipient, mintIndexPublicSaleAndContributors);
-            }              
+            }
         }
     }
 
@@ -442,28 +442,28 @@ contract Land is ERC721Enumerable, Ownable, ReentrancyGuard, VRFConsumerBase {
     }
 
     function mintFutureLandsWithAmount(address recipient, uint256 maxAmount) public onlyFutureMinter {
-        require(maxAmount <= MAX_MINT_PER_BLOCK, "maxAmount cannot exceed MAX_MINT_PER_BLOCK");    
+        require(maxAmount <= MAX_MINT_PER_BLOCK, "maxAmount cannot exceed MAX_MINT_PER_BLOCK");
         require(futureLandsNftIdCurrent < MAX_LANDS_WITH_FUTURE, "All future lands were already minted");
         for(uint256 claimed; claimed < maxAmount && futureLandsNftIdCurrent < MAX_LANDS_WITH_FUTURE; ++claimed){
 
             _safeMint(recipient, futureLandsNftIdCurrent++);
         }
     }
-     
+
     // metadata
     function loadLandMetadata(Metadata memory _landMetadata)
         external onlyOperator checkMetadataRange(_landMetadata)
         checkFirstMetadataRange(metadataHashes.length, _landMetadata.startIndex, _landMetadata.endIndex)
     {
         metadataHashes.push(_landMetadata);
-    } 
+    }
 
     function putLandMetadataAtIndex(uint256 index, Metadata memory _landMetadata)
         external onlyOperator checkMetadataRange(_landMetadata)
         checkFirstMetadataRange(index, _landMetadata.startIndex, _landMetadata.endIndex)
     {
         metadataHashes[index] = _landMetadata;
-    }     
+    }
 
     // randomness
     function requestRandomnessForPublicSaleAndContributors() external onlyOperator returns (bytes32 requestId) {
