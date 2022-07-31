@@ -39,11 +39,11 @@ where
             let mut source_code_raw = c.source_code.clone();
 
             if source_code_raw.starts_with("{{") {
-                source_code_raw = source_code_raw.strip_prefix("{").unwrap().to_string();
+                source_code_raw = source_code_raw.strip_prefix('{').unwrap().to_string();
             }
 
             if source_code_raw.ends_with("}}") {
-                source_code_raw = source_code_raw.strip_suffix("}").unwrap().to_string();
+                source_code_raw = source_code_raw.strip_suffix('}').unwrap().to_string();
             }
 
             // `source_code_raw` is a string containing either:
