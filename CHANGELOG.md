@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/dragossutu/etherscan/compare/1.8.1...1.9.0) (2022-07-31)
+
+
+### Features
+
+* **gh-23:** Run tests for x86_64-unknown-linux-musl target, to run on same target as release ([cb964c7](https://github.com/dragossutu/etherscan/commit/cb964c7f1646d6f30d2131db6aac421affe02103)), closes [#23](https://github.com/dragossutu/etherscan/issues/23)
+
 ## [1.8.1](https://github.com/dragossutu/etherscan/compare/1.8.0...1.8.1) (2022-07-30)
 
 
