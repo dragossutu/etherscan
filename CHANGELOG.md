@@ -1,3 +1,15 @@
+# [1.10.0](https://github.com/dragossutu/etherscan/compare/1.9.0...1.10.0) (2022-08-01)
+
+
+### Features
+
+* **gh-23:** Add pre-commit config, run pre-commit on all files ([5cdff61](https://github.com/dragossutu/etherscan/commit/5cdff6127fb1a8808213304182c413cae14de3eb)), closes [#23](https://github.com/dragossutu/etherscan/issues/23)
+* **gh-23:** Add README.md and update description in Cargo.toml ([35b024d](https://github.com/dragossutu/etherscan/commit/35b024dc3bdc73f1b5aa2c8cfd31942b4c7a95fc)), closes [#23](https://github.com/dragossutu/etherscan/issues/23)
+* **gh-23:** Change Github release asset label to be the same as file name ([11c43dd](https://github.com/dragossutu/etherscan/commit/11c43ddb28e9c17d7ec430034caa6800e8ce4e34)), closes [#23](https://github.com/dragossutu/etherscan/issues/23)
+* **gh-23:** Move files creating logic to separate Service ([60715f3](https://github.com/dragossutu/etherscan/commit/60715f32d912d265a2f318068973a6324122cb48)), closes [#23](https://github.com/dragossutu/etherscan/issues/23)
+* **gh-23:** Replace strip_prefix strings with chars where the string is one character long ([6f2f27a](https://github.com/dragossutu/etherscan/commit/6f2f27a295002ac94dcfee045a2c2a1c977b8073))
+* **gh-23:** Revert pre-commit changes on tests Solidity files and exclude them from pre-commit hooks ([6653f76](https://github.com/dragossutu/etherscan/commit/6653f762901e13124283dda132a358e49f7cf52c)), closes [#23](https://github.com/dragossutu/etherscan/issues/23)
+
 # [1.9.0](https://github.com/dragossutu/etherscan/compare/1.8.1...1.9.0) (2022-07-31)
 
 
