@@ -1,11 +1,12 @@
 use anyhow::{anyhow, Context, Result};
+use log::warn;
 use reqwest::blocking::Client as ReqwestClient;
 use serde::Deserialize;
 use std::vec::Vec;
 
 #[cfg_attr(test, mockall::automock)]
 pub trait Request {
-    fn get_source_code(&self, contract_address: &str) -> Result<Vec<ContractInfo>>;
+    fn get_source_code(&self, contract_address: &str) -> Result<ContractInfo>;
 }
 
 pub struct Client<'a> {
@@ -25,7 +26,7 @@ impl<'a> Client<'a> {
 }
 
 impl<'a> Request for Client<'a> {
-    fn get_source_code(&self, contract_address: &str) -> Result<Vec<ContractInfo>> {
+    fn get_source_code(&self, contract_address: &str) -> Result<ContractInfo> {
         let url = format!(
             "{}/api?module=contract&action=getsourcecode&address={}&apikey={}",
             self.api_url, contract_address, self.api_key,
@@ -48,16 +49,38 @@ impl<'a> Request for Client<'a> {
             .json()
             .context("failed to deserialize HTTP request body JSON")?;
 
-        Ok(body.result)
+        if body.message != "Ok" {
+            warn!("API response body.message is not \"OK\": {}", body.message)
+        }
+
+        if body.status != "1" {
+            warn!("API response body.status is not 1: {}", body.status)
+        }
+
+        if body.result.len() > 1 {
+            warn!(
+                "API response body.result length is greater than 1: {}",
+                body.result.len()
+            );
+        }
+
+        let contract_info = match body.result.first() {
+            Some(c) => c,
+            None => return Err(anyhow!("failed to get contract info from response")),
+        };
+
+        Ok((*contract_info).clone())
     }
 }
 
 #[derive(Deserialize)]
 struct ResponseBody {
+    message: String,
     result: Vec<ContractInfo>,
+    status: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct ContractInfo {
     #[serde(alias = "ContractName")]
     pub(crate) contract_name: String,
@@ -121,9 +144,7 @@ mod tests {
         // then
         assert!(r.is_ok(), "get_source_code() result is not OK");
 
-        let contracts_info = r.unwrap();
-        assert_eq!(contracts_info.len(), 1, "contracts_info vector length");
-        let c = contracts_info.get(0).unwrap();
+        let c = r.unwrap();
         assert_eq!(
             c.contract_name, "Uni",
             "contract_name is not what equal to expected"

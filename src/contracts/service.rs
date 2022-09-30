@@ -28,48 +28,46 @@ where
     C: Request,
 {
     fn get_contracts(&self, contract_address: &str) -> Result<Vec<Contract>> {
-        let contracts_info = self
+        let c = self
             .client
             .get_source_code(contract_address)
             .context("client failed to get source code")?;
 
         let mut contracts = Vec::new();
 
-        for c in contracts_info.iter() {
-            let mut source_code_raw = c.source_code.clone();
+        let mut source_code_raw = c.source_code.clone();
 
-            if source_code_raw.starts_with("{{") {
-                source_code_raw = source_code_raw.strip_prefix('{').unwrap().to_string();
-            }
+        if source_code_raw.starts_with("{{") {
+            source_code_raw = source_code_raw.strip_prefix('{').unwrap().to_string();
+        }
 
-            if source_code_raw.ends_with("}}") {
-                source_code_raw = source_code_raw.strip_suffix('}').unwrap().to_string();
-            }
+        if source_code_raw.ends_with("}}") {
+            source_code_raw = source_code_raw.strip_suffix('}').unwrap().to_string();
+        }
 
-            // `source_code_raw` is a string containing either:
-            // - all the contract code, that uploaded from a single file
-            // - or a JSON with the contract code split into multiple files
-            match serde_json::from_str(&source_code_raw) {
-                Err(e) => {
-                    if e.is_syntax() && e.line() == 1 && e.column() == 1 {
-                        // TODO: log here
-                        contracts.push(Contract {
-                            code: source_code_raw,
-                            path: c.contract_name.to_string(),
-                        });
-                    } else {
-                        return Err(anyhow::Error::new(e)
-                            .context("failed to deserialize JSON contract source code"));
-                    }
+        // `source_code_raw` is a string containing either:
+        // - all the contract code, that uploaded from a single file
+        // - or a JSON with the contract code split into multiple files
+        match serde_json::from_str(&source_code_raw) {
+            Err(e) => {
+                if e.is_syntax() && e.line() == 1 && e.column() == 1 {
+                    // TODO: log here
+                    contracts.push(Contract {
+                        code: source_code_raw,
+                        path: c.contract_name,
+                    });
+                } else {
+                    return Err(anyhow::Error::new(e)
+                        .context("failed to deserialize JSON contract source code"));
                 }
-                Ok(r) => {
-                    let s: SourceCode = r;
-                    for (contract_path, contract_code) in s.sources {
-                        contracts.push(Contract {
-                            code: contract_code.content,
-                            path: contract_path,
-                        });
-                    }
+            }
+            Ok(r) => {
+                let s: SourceCode = r;
+                for (contract_path, contract_code) in s.sources {
+                    contracts.push(Contract {
+                        code: contract_code.content,
+                        path: contract_path,
+                    });
                 }
             }
         }
@@ -116,10 +114,10 @@ mod tests {
             .with(eq(contract_address))
             .times(1)
             .returning(|_| {
-                Ok(vec![ContractInfo {
+                Ok(ContractInfo {
                     contract_name: "MyContract".to_string(),
                     source_code: source_code.to_string(),
-                }])
+                })
             });
 
         let service = Service::new(&mock_client);
