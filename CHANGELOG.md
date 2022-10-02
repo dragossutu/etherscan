@@ -1,3 +1,13 @@
+# [1.11.0](https://github.com/dragossutu/etherscan/compare/1.10.0...1.11.0) (2022-10-02)
+
+
+### Features
+
+* **gh-26:** Add contract name as prefix to downloaded cotracts files folder. Add more unit tests ([2d31e4b](https://github.com/dragossutu/etherscan/commit/2d31e4b20fb26c47e9c5b11c4b6cd47b1302a15d))
+* **gh-26:** Cargo update ([a95909f](https://github.com/dragossutu/etherscan/commit/a95909f038a1c3ee1b33aee6dd069011e9a71060)), closes [#26](https://github.com/dragossutu/etherscan/issues/26)
+* **gh-26:** Change Client to return a single ContractInfo struct instead of vec. Log abnormal API response messages ([fbcf4f3](https://github.com/dragossutu/etherscan/commit/fbcf4f3de3889000c801cc426199fbd14ae51c25)), closes [#26](https://github.com/dragossutu/etherscan/issues/26)
+* **gh-26:** Update --help command output in docs ([92c8d66](https://github.com/dragossutu/etherscan/commit/92c8d6696c6563b7dbf0b9489faace34fffab094)), closes [#26](https://github.com/dragossutu/etherscan/issues/26)
+
 # [1.10.0](https://github.com/dragossutu/etherscan/compare/1.9.0...1.10.0) (2022-08-01)
 
 
