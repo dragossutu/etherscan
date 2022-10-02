@@ -22,20 +22,23 @@ jobs:
           command: test
           args: --release --target=x86_64-unknown-linux-musl
           use-cross: true
+      - name: Install semantic-release and toml-cli
+        run: |
+          npm install --save-dev \
+            semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/git \
+              && pip3 install toml-cli
+      - name: Get next release tag and update Cargo.toml
+        run: |
+          next_release_version=$(npx semantic-release --dry-run | grep --only-matching --perl-regexp 'Published release \K(\d|\.)+')
+          toml set --toml-path Cargo.toml package.version "${next_release_version}" && cargo check
       - name: Build Linux x86_64 release binary
         uses: actions-rs/cargo@v1
         with:
           command: build
           args: --release --target=x86_64-unknown-linux-musl
           use-cross: true
-      - name: Install semantic-release and toml-cli
-        run: |
-          npm install --save-dev \
-            semantic-release \
-            @semantic-release/changelog \
-            @semantic-release/exec \
-            @semantic-release/git \
-              && pip3 install toml-cli
       - name: Release it!
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}

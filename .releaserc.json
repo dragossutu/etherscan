@@ -7,12 +7,6 @@
     "@semantic-release/release-notes-generator",
     "@semantic-release/changelog",
     [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "toml set --toml-path Cargo.toml package.version ${nextRelease.version} && cargo check"
-      }
-    ],
-    [
       "@semantic-release/git",
       {
         "assets": [
