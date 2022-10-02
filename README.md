@@ -15,8 +15,11 @@ issue.
 
 ### Download
 
+Check the Releases page for latest stable version and update `ETHERSCAN_VERSION` env var below.
+
 ```bash
-curl -LO https://github.com/dragossutu/etherscan/releases/download/1.9.0/etherscan-linux-amd64-1.9.0 -o etherscan \
+ETHERSCAN_VERSION="1.11.0" \
+  && curl -L -o etherscan "https://github.com/dragossutu/etherscan/releases/download/${ETHERSCAN_VERSION}/etherscan-linux-amd64-${ETHERSCAN_VERSION}" \
   && chmod +x etherscan \
   && sudo mv etherscan /usr/local/bin
 ```
@@ -34,8 +37,7 @@ cargo build --release
 
 1. Create an API key for the block explorer you want to use the CLI for. (requires an account)
 
-2. (Optional) Export the API key as an environment variable ETHERSCAN_API_KEY.
-Can be passed as CLI flag outherwise
+2. Export the API key as an environment variable `ETHERSCAN_API_KEY` or pass it as a CLI flag:
 ```bash
 export ETHERSCAN_API_KEY=your_api_key_here
 ```
