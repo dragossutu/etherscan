@@ -1,6 +1,6 @@
 [package]
 name = "etherscan"
-version = "1.11.0"
+version = "1.11.1"
 edition = "2021"
 description = "A CLI app to interact with etherscan.io API or other blockchain explorers built with etherscan.io"
 

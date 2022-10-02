@@ -1,3 +1,12 @@
+## [1.11.1](https://github.com/dragossutu/etherscan/compare/1.11.0...1.11.1) (2022-10-02)
+
+
+### Bug Fixes
+
+* **gh-28:** Fix install command in docs ([eb5d654](https://github.com/dragossutu/etherscan/commit/eb5d6544cdeaeae4251798506a28901be2dade0a))
+* **gh-28:** Get next release, using semantic-release, before building binary. Update version in Cargo files from pipeline instead of using semantic-release exec plugin ([5bf6c97](https://github.com/dragossutu/etherscan/commit/5bf6c97001ecc519bffcc349774bc2e18971a13b)), closes [#28](https://github.com/dragossutu/etherscan/issues/28)
+* **gh-28:** Pass GH_TOKEN to step that runs semantic-release in dry-run to get next version ([ad2e10d](https://github.com/dragossutu/etherscan/commit/ad2e10d905baf69ac0f58046ba19b3d3342c3e2f)), closes [#28](https://github.com/dragossutu/etherscan/issues/28)
+
 # [1.11.0](https://github.com/dragossutu/etherscan/compare/1.10.0...1.11.0) (2022-10-02)
 
 
