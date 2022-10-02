@@ -100,7 +100,7 @@ fn main() -> Result<()> {
 
     let files_service = FilesService::new();
 
-    let contracts = contracts_service
+    let contract = contracts_service
         .get_contracts(&args.contract_address)
         .context("contracts_service failed to get contracts")?;
 
@@ -108,6 +108,6 @@ fn main() -> Result<()> {
         &args.files_dest_path,
         network_name,
         &args.contract_address,
-        contracts,
+        contract,
     )
 }

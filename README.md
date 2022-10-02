@@ -55,32 +55,49 @@ For the example above the folder would be `./contracts/ethereum/0x34d85c9CDeB23F
 ### Usage
 
 ```bash
+$ etherscan --help
 A CLI app to interact with etherscan.io API or other blockchain explorers built with etherscan.io
 
 USAGE:
     etherscan [OPTIONS] --api-key <API_KEY> <CONTRACT_ADDRESS>
 
 ARGS:
-    <CONTRACT_ADDRESS>    Address of the contract to download files for
+    <CONTRACT_ADDRESS>
+            Address of the contract to download files for
 
 OPTIONS:
     -d, --files-dest-path <FILES_DEST_PATH>
-            Local path to the folder where the contract's files will be created [default:
-            ./contracts]
+            Local path to the folder where the contract's files will be created
+
+            Folder will be created if it doesn't exist
+
+            [default: ./contracts]
 
     -h, --help
             Print help information
 
     -k, --api-key <API_KEY>
-            The API key for the block explorer [env: ETHERSCAN_API_KEY=]
+            The API key for the block explorer
+
+            It will be read from the environment variable ETHERSCAN_API_KEY first
+
+            [env: ETHERSCAN_API_KEY=]
 
     -n, --network <NETWORK>
-            The name of the network [default: ethereum] [possible values: arbitrum, aurora,
-            avalanche, bsc, bttc, celo, clv, cronos, ethereum, fantom, heco, optimism, moonbeam,
-            moonriver, polygon]
+            The name of the network
+
+            Must match the block explorer that the API key is for. e.g if network = arbitrum, the
+            CLI will make requests to https://api.arbiscan.io, so the API key must be for
+            https://api.arbiscan.io
+
+            [default: ethereum]
+            [possible values: arbitrum, aurora, avalanche, bsc, bttc, celo, clv, cronos, ethereum,
+            fantom, heco, optimism, moonbeam, moonriver, polygon]
 
     -u, --api-url <API_URL>
             Used for tests only. The URL of the block explorer's API
+
+            e.g. https://api.etherscan.io. If passed in, the `network` argument is ignored
 
     -V, --version
             Print version information

@@ -9,6 +9,7 @@ struct TestCase<'a> {
     comparison_contract_path_actual: &'a str,
     comparison_contract_path_expected: &'a str,
     contract_address: &'a str,
+    contract_name: &'a str,
     files_relative_paths: &'a [&'a str],
     network: &'a str,
 }
@@ -41,6 +42,7 @@ fn it_calls_api_successfully() {
             comparison_contract_path_actual: "contracts/main/Land.sol",
             comparison_contract_path_expected: "./tests/Land.sol",
             contract_address: "0x34d85c9CDeB23FA97cb08333b511ac86E1C4E258",
+            contract_name: "Land",
             files_relative_paths: &[
                 "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol",
                 "@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol",
@@ -90,6 +92,7 @@ fn it_calls_api_successfully() {
             comparison_contract_path_actual: "Uni.sol",
             comparison_contract_path_expected: "./tests/Uni.sol",
             contract_address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+            contract_name: "Uni",
             files_relative_paths: &["Uni.sol"],
             network: "ethereum",
         },
@@ -132,13 +135,18 @@ fn test_success(t: &TestCase) {
     _m.assert();
 
     // assert solidity files were created
+    let mut contract_dir_name_builder = String::from(t.contract_name);
+    contract_dir_name_builder.push_str("-");
+    contract_dir_name_builder.push_str(t.contract_address);
+    let contract_dir_name = contract_dir_name_builder.as_str();
+
     let expected_files_paths: Vec<PathBuf> = t
         .files_relative_paths
         .iter()
         .map(|p| {
             Path::new(files_dest_path)
                 .join(t.network)
-                .join(t.contract_address)
+                .join(contract_dir_name)
                 .join(p)
         })
         .collect();
@@ -153,7 +161,7 @@ fn test_success(t: &TestCase) {
     };
     let actual_file_path = Path::new(files_dest_path)
         .join(t.network)
-        .join(t.contract_address)
+        .join(contract_dir_name)
         .join(t.comparison_contract_path_actual);
     let actual_file_contents = match fs::read_to_string(actual_file_path) {
         Err(e) => panic!("failed to read file {:?}", e),
@@ -167,7 +175,7 @@ fn test_success(t: &TestCase) {
     // remove files to clean up after test
     let test_files_dir = Path::new(files_dest_path)
         .join(t.network)
-        .join(t.contract_address);
+        .join(contract_dir_name);
     assert!(
         fs::remove_dir_all(&test_files_dir).is_ok(),
         "failed to remove test files dir {:?}",

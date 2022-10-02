@@ -9,7 +9,7 @@ pub trait Files {
         files_dest_path: &str,
         network_name: &str,
         contract_address: &str,
-        contracts: Vec<Contract>,
+        contract: Contract,
     ) -> Result<()>;
 }
 
@@ -27,9 +27,9 @@ impl Files for Service {
         files_dest_path: &str,
         network_name: &str,
         contract_address: &str,
-        contracts: Vec<Contract>,
+        contract: Contract,
     ) -> Result<()> {
-        for c in contracts.iter() {
+        for c in contract.parts.iter() {
             let mut p = Path::new(&c.path);
 
             // some contracts path contain a leading "/",
@@ -59,15 +59,19 @@ impl Files for Service {
                 ));
             }
 
-            let contract_dir = Path::new(files_dest_path)
+            let mut contract_dir_name_builder = String::from(&contract.name);
+            contract_dir_name_builder.push('-');
+            contract_dir_name_builder.push_str(contract_address);
+
+            let contract_path = Path::new(files_dest_path)
                 .join(network_name)
-                .join(contract_address)
+                .join(contract_dir_name_builder.as_str())
                 .join(p.parent().unwrap());
 
-            fs::create_dir_all(&contract_dir).context("failed to create contracts dir")?;
+            fs::create_dir_all(&contract_path).context("failed to create contracts dir")?;
 
             // create Solidity file
-            let contract_file_path = contract_dir.join(file_name);
+            let contract_file_path = contract_path.join(file_name);
             fs::write(contract_file_path, &c.code)
                 .context("failed to crate and write to solidity file")?;
         }
