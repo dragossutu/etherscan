@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/dragossutu/etherscan/compare/1.11.1...1.12.0) (2022-10-10)
+
+
+### Features
+
+* **gh-31:** Add optional CLI arg for providing prefix for downloaded contracts folder name ([2e1bcd4](https://github.com/dragossutu/etherscan/commit/2e1bcd42b76d0033fb3111a0d6ed76af843fcd80))
+
 ## [1.11.1](https://github.com/dragossutu/etherscan/compare/1.11.0...1.11.1) (2022-10-02)
 
 
