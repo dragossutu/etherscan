@@ -37,6 +37,10 @@ struct Args {
     /// Folder will be created if it doesn't exist
     files_dest_path: String,
 
+    #[clap(default_value = "", long, short = 'p')]
+    /// Prefix that will be added to the downloaded contracts folder name, followed by a `-`
+    folder_prefix: String,
+
     #[clap(arg_enum, default_value_t = Network::Ethereum, long, short, value_parser)]
     /// The name of the network
     ///
@@ -105,9 +109,10 @@ fn main() -> Result<()> {
         .context("contracts_service failed to get contracts")?;
 
     files_service.create_contract_files(
-        &args.files_dest_path,
-        network_name,
-        &args.contract_address,
         contract,
+        &args.contract_address,
+        &args.files_dest_path,
+        &args.folder_prefix,
+        network_name,
     )
 }

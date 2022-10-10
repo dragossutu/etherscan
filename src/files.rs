@@ -6,10 +6,11 @@ use std::path::Path;
 pub trait Files {
     fn create_contract_files(
         &self,
-        files_dest_path: &str,
-        network_name: &str,
-        contract_address: &str,
         contract: Contract,
+        contract_address: &str,
+        files_dest_path: &str,
+        folder_prefix: &str,
+        network_name: &str,
     ) -> Result<()>;
 }
 
@@ -24,10 +25,11 @@ impl Service {
 impl Files for Service {
     fn create_contract_files(
         &self,
-        files_dest_path: &str,
-        network_name: &str,
-        contract_address: &str,
         contract: Contract,
+        contract_address: &str,
+        files_dest_path: &str,
+        folder_prefix: &str,
+        network_name: &str,
     ) -> Result<()> {
         for c in contract.parts.iter() {
             let mut p = Path::new(&c.path);
@@ -59,7 +61,15 @@ impl Files for Service {
                 ));
             }
 
-            let mut contract_dir_name_builder = String::from(&contract.name);
+            let mut contract_dir_name_builder;
+            if folder_prefix.is_empty() {
+                contract_dir_name_builder = String::from(&contract.name);
+            } else {
+                contract_dir_name_builder = String::from(folder_prefix);
+                contract_dir_name_builder.push('-');
+                contract_dir_name_builder.push_str(&contract.name);
+            }
+
             contract_dir_name_builder.push('-');
             contract_dir_name_builder.push_str(contract_address);
 
