@@ -61,17 +61,11 @@ impl Files for Service {
                 ));
             }
 
-            let mut contract_dir_name_builder;
-            if folder_prefix.is_empty() {
-                contract_dir_name_builder = String::from(&contract.name);
+            let contract_dir_name_builder = if folder_prefix.is_empty() {
+                format!("{}-{}", contract.name, contract_address)
             } else {
-                contract_dir_name_builder = String::from(folder_prefix);
-                contract_dir_name_builder.push('-');
-                contract_dir_name_builder.push_str(&contract.name);
-            }
-
-            contract_dir_name_builder.push('-');
-            contract_dir_name_builder.push_str(contract_address);
+                format!("{}-{}-{}", folder_prefix, contract.name, contract_address)
+            };
 
             let contract_path = Path::new(files_dest_path)
                 .join(network_name)
