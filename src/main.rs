@@ -4,7 +4,6 @@ use log::info;
 use reqwest::blocking::Client as ReqwestClient;
 
 mod contracts;
-
 use contracts::client::{Client, Request};
 use contracts::service::{Contracts, Service as ContractsService};
 
