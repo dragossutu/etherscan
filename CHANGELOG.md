@@ -1,3 +1,11 @@
+# [1.13.0](https://github.com/dragossutu/etherscan/compare/1.12.0...1.13.0) (2022-12-08)
+
+
+### Features
+
+* **gh-34:** Add Github permissions on, run workflow on all branches, comment out build and release steps ([a2a1195](https://github.com/dragossutu/etherscan/commit/a2a11950a1f89527bd6bc59113f3d8741f90c5e9)), closes [#34](https://github.com/dragossutu/etherscan/issues/34)
+* **gh-34:** Run pipeline only on main brach, re-enable build and release steps. ([86536ee](https://github.com/dragossutu/etherscan/commit/86536eefdb9de692dabbcdbfa58334cc68acceb2)), closes [#34](https://github.com/dragossutu/etherscan/issues/34)
+
 # [1.12.0](https://github.com/dragossutu/etherscan/compare/1.11.1...1.12.0) (2022-10-10)
 
 
