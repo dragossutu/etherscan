@@ -1,8 +1,15 @@
 name: test-build-release
-on:
-  push:
-    branches:
-      - main
+on: [push]
+#on:
+#  push:
+#    branches:
+#      - main
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
   test_build_release:
     name: Test build release
@@ -35,13 +42,13 @@ jobs:
         run: |
           next_release_version=$(npx semantic-release --dry-run | grep --only-matching --perl-regexp 'Published release \K(\d|\.)+')
           toml set --toml-path Cargo.toml package.version "${next_release_version}" && cargo check
-      - name: Build Linux x86_64 release binary
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --target=x86_64-unknown-linux-musl
-          use-cross: true
-      - name: Release it!
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npx semantic-release
+#      - name: Build Linux x86_64 release binary
+#        uses: actions-rs/cargo@v1
+#        with:
+#          command: build
+#          args: --release --target=x86_64-unknown-linux-musl
+#          use-cross: true
+#      - name: Release it!
+#        env:
+#          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+#        run: npx semantic-release
